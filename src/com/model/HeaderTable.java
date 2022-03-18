@@ -1,13 +1,16 @@
 package com.model;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class HeaderTable extends DefaultTableModel {
     private String [] cols = {"No.","Date","Customer","Total"};
+
     private ArrayList<InvoiceHeader> invoicesFromHeader;
+
     public HeaderTable(ArrayList<InvoiceHeader> invoicesFromHeader){
         this.invoicesFromHeader = invoicesFromHeader;
     }
@@ -24,7 +27,7 @@ public class HeaderTable extends DefaultTableModel {
 
     @Override
     public int getRowCount() {
-        if(this.invoicesFromHeader==null){
+        if(this.invoicesFromHeader == null){
             invoicesFromHeader = new ArrayList<>();
         }
         return invoicesFromHeader.size();
@@ -32,7 +35,7 @@ public class HeaderTable extends DefaultTableModel {
 
     @Override
     public Object getValueAt(int row, int column) {
-        InvoiceHeader invoiceHeader= invoicesFromHeader.get(row);
+        InvoiceHeader invoiceHeader = invoicesFromHeader.get(row);
         switch (column){
             case 0: return invoiceHeader.getNum();
             case 1: return invoiceHeader.getDate();
@@ -44,5 +47,10 @@ public class HeaderTable extends DefaultTableModel {
 
     public ArrayList<InvoiceHeader> getInvoicesFromHeader() {
         return invoicesFromHeader;
+    }
+
+    @Override
+    public void removeRow(int row) {
+        invoicesFromHeader.remove(row);
     }
 }

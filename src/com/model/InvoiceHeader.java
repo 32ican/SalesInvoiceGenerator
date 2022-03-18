@@ -23,8 +23,6 @@ public class InvoiceHeader {
         this.num = num;
         this.date = date;
         this.customerName = customerName;
-
-
     }
 
     public int getNum() {
@@ -66,10 +64,10 @@ public class InvoiceHeader {
         return lines;
     }
 
-    public void setLines(ArrayList<InvoiceLine> lines) {
-
-        this.lines = lines;
-    }
+//    public void setLines(ArrayList<InvoiceLine> lines) {
+//
+//        this.lines = lines;
+//    }
 
  public void addLine(InvoiceLine line){
         getLines().add(line);

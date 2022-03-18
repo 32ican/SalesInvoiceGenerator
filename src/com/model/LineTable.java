@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class LineTable extends DefaultTableModel {
     private String [] colsLT = {"No.","Item Name","Price",
             "Count","Title"};
-    ArrayList<InvoiceLine>  invoicesFromLine;
 
+    ArrayList<InvoiceLine>  invoicesFromLine;
 
     public LineTable (ArrayList<InvoiceLine> invoicesFromLine){
         this.invoicesFromLine = invoicesFromLine;
@@ -44,6 +44,12 @@ public class LineTable extends DefaultTableModel {
         }
         return null;
     }
+
+    @Override
+    public void removeRow(int row) {
+        invoicesFromLine.remove(row);
+    }
+
 
     public ArrayList<InvoiceLine> getInvoicesFromLine() {
         return invoicesFromLine;

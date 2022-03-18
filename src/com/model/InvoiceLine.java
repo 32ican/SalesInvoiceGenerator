@@ -20,11 +20,12 @@ public class InvoiceLine {
     private InvoiceHeader invoice;
 //    ArrayList<InvoiceHeader>arrInvHeader;
 
-    public InvoiceLine(int numOfItem,String product, double price, int count,InvoiceHeader invoice) {
-        this.numOfItems = numOfItem;
+    public InvoiceLine(String product, double price, int count,InvoiceHeader invoice) {
+//        this.numOfItems = numOfItem;
         this.product = product;
         this.price = price;
         this.count = count;
+        this.invoice = invoice;
         this.setLineTotal(this.count * this.price);
     }
 
