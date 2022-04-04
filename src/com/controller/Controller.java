@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Controller extends javax.swing.JFrame {
+public class Controller extends JFrame {
 
     public Controller(ProjectsFrame frame) throws HeadlessException {
         this.frame = frame;
@@ -35,12 +35,14 @@ public class Controller extends javax.swing.JFrame {
 
     public void loadFiles() throws Exception, ParseException {
         invoices.clear();
+        invoiceLines.clear();
         JOptionPane.showMessageDialog(this, "Please select Invoice Header file",
                 "Invoice Header", JOptionPane.WARNING_MESSAGE);
         JFileChooser fc = new JFileChooser();
         int option = fc.showOpenDialog(this);
+        File selectedFile;
         if (option == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fc.getSelectedFile();
+            selectedFile = fc.getSelectedFile();
             FileReader fr = new FileReader(selectedFile);
             BufferedReader br = new BufferedReader(fr);
             String line = null;
@@ -57,38 +59,46 @@ public class Controller extends javax.swing.JFrame {
             }
             br.close();
             fr.close();
+        }
 
-            HeaderTable headerTable;
-            headerTable = new HeaderTable(invoices);
-            frame.getjTable1().setModel(headerTable);
-            headerTable.fireTableDataChanged();
 
-            JOptionPane.showMessageDialog(this,"Please select Invoice Line file",
-                    "Invoice Line",JOptionPane.WARNING_MESSAGE);
-            option = fc.showOpenDialog(this);
-            if (option == JFileChooser.APPROVE_OPTION);
+
+        JOptionPane.showMessageDialog(this, "Please select Invoice Line file",
+                "Invoice Line", JOptionPane.WARNING_MESSAGE);
+        option = fc.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
             selectedFile = fc.getSelectedFile();
+            FileReader fr = new FileReader(selectedFile);
+            BufferedReader br = new BufferedReader(fr);
             fr = new FileReader(selectedFile);
             br = new BufferedReader(fr);
-            while ((line = br.readLine()) !=null){
-                String [] lineSegments = line.split(",");
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String[] lineSegments = line.split(",");
                 String invNumStr = lineSegments[0];
                 String item = lineSegments[1];
                 String priceStr = lineSegments[2];
-                String countStr = lineSegments [3];
+                String countStr = lineSegments[3];
                 int invNum = Integer.parseInt(invNumStr);
                 double price = Double.parseDouble(priceStr);
                 int count = Integer.parseInt(countStr);
 
-                header =  findByNum(invNum);
-                InvoiceLine invLine = new InvoiceLine(item,price,count,header);
+                header = findByNum(invNum);
+                InvoiceLine invLine = new InvoiceLine(item, price, count, header);
                 header.addLine(invLine);
             }
             br.close();
             fr.close();
-        }
+
+            headerTable = new HeaderTable(invoices);
+            headerTable = new HeaderTable(invoices);
+            frame.getjTable1().setModel(headerTable);
+            frame.getjTable1().validate();
 
         }
+    }
+
+
 
 
         public void saveDataInLines() throws IOException {
@@ -163,21 +173,24 @@ public class Controller extends javax.swing.JFrame {
         String itemNameInput = lineDialog.getItemNameField().getText();
         String itemCountStr = lineDialog.getItemCountField().getText();
         String itemPriceStr = lineDialog.getItemPriceField().getText();
-        lineDialog.setVisible(false);
         int itemCount = Integer.parseInt(itemCountStr);
         double itemPrice = Double.parseDouble(itemPriceStr);
-        int num = getMaxNum() ;
-        InvoiceHeader invoiceHeader = invoices.get(frame.getjTable1().getSelectedRow());
-        InvoiceLine newInvoiceLine = new InvoiceLine(itemNameInput,itemPrice,itemCount,invoiceHeader);
-        invoiceLines.add(newInvoiceLine);
-        lineTable = new LineTable(invoiceLines);
-        frame.getjTable2().setModel(lineTable);
-       frame.getjTable2().validate();
+
+        lineDialog.setVisible(false);
+
+        int row = frame.getjTable1().getSelectedRow();
+        if (row > 0) {
+            InvoiceHeader header = invoices.get(row);
+            InvoiceLine line = new InvoiceLine(itemNameInput,itemPrice,itemCount,header);
+            header.addLine(line);
+            lineTable.fireTableDataChanged();
+            headerTable.fireTableDataChanged();
+        }
+
     }
 
     public void cancelAddingNewItem (){
-        lineDialog.setVisible(false);
-    }
+        lineDialog.setVisible(false);}
 
     public void deleteInvoice(){
         int IndexOfRow = frame.getjTable1().getSelectedRow();
@@ -211,14 +224,12 @@ public class Controller extends javax.swing.JFrame {
 
         int rowIndex = frame.getjTable1().getSelectedRow();
         if (rowIndex >= 0) {
-            headerTable = new HeaderTable(invoices);
             InvoiceHeader row = headerTable.getInvoicesFromHeader().get(rowIndex);
             frame.getInvNumLbl().setText("" + row.getNum());
             frame.getInvDateTF().setText(row.getDate().toString());
             frame.getCusNameTF().setText(row.getCustomerName());
             frame.getInvTotalLb().setText("" + row.getInvHeaderTotal());
             ArrayList<InvoiceLine> invoiceLines = row.getLines();
-            headerTable.fireTableDataChanged();
             lineTable = new LineTable(invoiceLines);
             frame.getjTable2().setModel(lineTable);
             lineTable.fireTableDataChanged();
