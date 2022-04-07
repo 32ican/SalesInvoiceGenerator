@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com;
+package com.view;
 
-import com.controller.Controller;
+import com.controll.Controller;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

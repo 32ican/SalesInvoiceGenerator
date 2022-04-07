@@ -1,6 +1,4 @@
-package com.dialogs;
-
-import com.ProjectsFrame;
+package com.view;
 
 import javax.swing.*;
 import java.awt.*;

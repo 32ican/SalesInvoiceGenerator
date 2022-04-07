@@ -1,8 +1,8 @@
-package com.controller;
+package com.controll;
 
-import com.ProjectsFrame;
-import com.dialogs.HeaderDialog;
-import com.dialogs.LineDialog;
+import com.view.ProjectsFrame;
+import com.view.HeaderDialog;
+import com.view.LineDialog;
 import com.model.HeaderTable;
 import com.model.InvoiceHeader;
 import com.model.InvoiceLine;
